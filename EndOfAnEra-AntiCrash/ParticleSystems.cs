@@ -516,6 +516,7 @@ namespace EndOfAnEra_AntiCrash
                 }
             }
 
+            // buffer modes are never a standard usage let alone almost ever used in a safe way
             if (ps.emissionRate >= 0 && ps.maxParticles >= 0 && (ps.main.ringBufferMode == ParticleSystemRingBufferMode.LoopUntilReplaced || ps.main.ringBufferMode == ParticleSystemRingBufferMode.PauseUntilReplaced))
             {
                 if (NukeAnyways)
@@ -529,12 +530,6 @@ namespace EndOfAnEra_AntiCrash
                     ps.main.maxParticles = (int)Helpers.Limit(ps.main.maxParticles, Limits.MaxParticleCount / 16, ps.name + ".main.maxParticles", shouldLog);
                     ps.main.ringBufferMode = ParticleSystemRingBufferMode.Disabled;
                 }
-            }
-
-            if (ps.emissionRate == 0 && ps.maxParticles == 0 && (ps.main.ringBufferMode == ParticleSystemRingBufferMode.LoopUntilReplaced || ps.main.ringBufferMode == ParticleSystemRingBufferMode.PauseUntilReplaced))
-            {
-                if (Helpers.Nuke(ps, ref Limits, shouldLog, $"having 0 emissionRate and 0 maxParticles while ringbuffer enabled"))
-                    return;
             }
 
             var lineRenderer = ps.GetComponent<LineRenderer>();
