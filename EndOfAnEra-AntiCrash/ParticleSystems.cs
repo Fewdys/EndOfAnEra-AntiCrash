@@ -2,6 +2,7 @@
 
 namespace EndOfAnEra_AntiCrash
 {
+    // Im Sure Im Even Missing Checks Here But This Is A Concept, Not A Full Proof Fix For All Cases. In Majority Of Cases This Should Be Able To Prevent Crashing
     public class ParticleSystems
     {
         internal static void SanitizeParticleSystem(ParticleSystem ps, ref Limits Limits, bool shouldLog, bool NukeAnyways = false)
@@ -57,7 +58,7 @@ namespace EndOfAnEra_AntiCrash
                     int vertexCount = mesh.vertexCount;
                     int triangleCount = (int)Renderers.GetTrianglesCountImpl(mesh);
 
-                    if (vertexCount >= 65000)
+                    if (vertexCount >= 65000) // good to hard limit here
                     {
                         if (Helpers.Nuke(ps, ref Limits, shouldLog, $"mesh too complex (vertices: {vertexCount} > 65000)"))
                             return;
@@ -134,7 +135,7 @@ namespace EndOfAnEra_AntiCrash
                 Limits.recursionDepth--;
             }
 
-            if (ps.playbackSpeed >= 125) // most things below this can be clamped safely
+            if (ps.playbackSpeed >= 125)
             {
                 if (NukeAnyways)
                 {
@@ -536,12 +537,16 @@ namespace EndOfAnEra_AntiCrash
             if (lineRenderer != null)
             {
                 // sanitize line renderer used on particle system here
+                // for example:
+                // limit material count, numCapVertices, numCornerVertices and bounds to prevent extreme cases of very high values causing performance issues e.g
             }
 
             var trailRenderer = ps.GetComponent<TrailRenderer>();
             if (trailRenderer != null)
             {
                 // sanitize trail renderer used on particle system here
+                // for example:
+                // limit numCapVertices and numCornerVertices to prevent extreme cases of very high values causing performance issues e.g
             }
 
             Transform transform = ps.transform;
